@@ -7,6 +7,14 @@
     "doctor-mcp": "./dist/cli.js"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LSUFN/doctor-mcp-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LSUFN/doctor-mcp-cli/issues"
+  },
+  "homepage": "https://github.com/LSUFN/doctor-mcp-cli#readme",
   "keywords": [
     "mcp",
     "model-context-protocol",
