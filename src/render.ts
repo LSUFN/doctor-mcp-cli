@@ -1,10 +1,13 @@
 import pc from "picocolors";
 import type { CheckResult, CheckStatus, DoctorReport } from "./types.js";
 
-export function renderHumanReport(report: DoctorReport): string {
+export function renderHumanReport(report: DoctorReport, options: { ci?: boolean } = {}): string {
   const lines: string[] = [];
+  const checks = options.ci
+    ? report.checks.filter((check) => check.status === "error" || check.status === "warn")
+    : report.checks;
 
-  for (const check of report.checks) {
+  for (const check of checks) {
     lines.push(renderCheck(check));
     if (check.suggestion) {
       lines.push(`       ${pc.dim(check.suggestion)}`);
@@ -12,7 +15,7 @@ export function renderHumanReport(report: DoctorReport): string {
   }
 
   if (lines.length === 0) {
-    lines.push(`${statusLabel("skip")} No MCP config files found.`);
+    lines.push(options.ci ? `${statusLabel("ok")} No warnings or errors found.` : `${statusLabel("skip")} No MCP config files found.`);
   }
 
   lines.push("");

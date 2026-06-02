@@ -21,6 +21,7 @@ describe("doctor orchestration", () => {
       cwd: dir,
       configPath,
       json: true,
+      ci: false,
       start: true,
       timeoutMs: 100
     });

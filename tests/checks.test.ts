@@ -19,7 +19,7 @@ describe("static checks", () => {
     expect(checks.some((check) => check.title.includes("path does not exist"))).toBe(true);
   });
 
-  it("recognizes URL servers as skipped", () => {
+  it("recognizes URL servers for reachability checks", () => {
     const server = makeServer(process.cwd(), {
       transport: "http",
       command: undefined,
@@ -28,7 +28,8 @@ describe("static checks", () => {
 
     const checks = runStaticChecks(server);
 
-    expect(checks[0]?.status).toBe("skip");
+    expect(checks[0]?.status).toBe("ok");
+    expect(checks[0]?.suggestion).toContain("reachability");
   });
 });
 

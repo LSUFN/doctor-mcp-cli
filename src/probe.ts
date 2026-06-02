@@ -7,6 +7,9 @@ import { resolvePath } from "./path-utils.js";
 import type { CheckResult, ServerDefinition } from "./types.js";
 
 export async function probeServer(server: ServerDefinition, timeoutMs: number): Promise<CheckResult[]> {
+  if (server.transport === "http" || server.transport === "sse") {
+    return probeUrlServer(server, timeoutMs);
+  }
   if (server.transport !== "stdio") {
     return [];
   }
@@ -86,10 +89,10 @@ export async function probeServer(server: ServerDefinition, timeoutMs: number): 
         serverId: server.id,
         sourceId: server.sourceId,
         title: `${server.name}: startup probe failed`,
-        message: timedOut ? `Timed out after ${timeoutMs}ms` : errorMessage(error),
+        message: timedOut ? `Timed out after ${timeoutMs}ms` : humanizeStartupError(error),
         suggestion: timedOut
           ? "Increase --timeout or check whether the server waits for input before starting."
-          : "Run the configured command manually to inspect its startup error."
+          : startupSuggestion(error)
       }
     ];
   } finally {
@@ -97,6 +100,46 @@ export async function probeServer(server: ServerDefinition, timeoutMs: number): 
       clearTimeout(timeoutHandle);
     }
     await closeClient(client, transport);
+  }
+}
+
+async function probeUrlServer(server: ServerDefinition, timeoutMs: number): Promise<CheckResult[]> {
+  if (!server.url) {
+    return [];
+  }
+
+  const controller = new AbortController();
+  const timeoutHandle = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(server.url, {
+      method: "HEAD",
+      signal: controller.signal
+    });
+
+    return [
+      {
+        status: response.ok ? "ok" : "warn",
+        serverId: server.id,
+        sourceId: server.sourceId,
+        title: `${server.name}: URL reachable`,
+        message: `${response.status} ${response.statusText}`.trim(),
+        suggestion: response.ok ? undefined : "The endpoint responded, but not with a 2xx status."
+      }
+    ];
+  } catch (error) {
+    return [
+      {
+        status: "error",
+        serverId: server.id,
+        sourceId: server.sourceId,
+        title: `${server.name}: URL reachability failed`,
+        message: humanizeStartupError(error),
+        suggestion: startupSuggestion(error)
+      }
+    ];
+  } finally {
+    clearTimeout(timeoutHandle);
   }
 }
 
@@ -109,6 +152,34 @@ async function listTools(client: Client, transport: StdioClientTransport): Promi
 async function closeClient(client: Client, transport: StdioClientTransport): Promise<void> {
   await client.close().catch(() => undefined);
   await transport.close().catch(() => undefined);
+}
+
+function humanizeStartupError(error: unknown): string {
+  const message = errorMessage(error);
+  if (message.includes("ENOENT")) {
+    return "The configured command was not found on PATH.";
+  }
+  if (message.includes("ECONNREFUSED")) {
+    return "The server refused the connection.";
+  }
+  if (message.includes("ENOTFOUND")) {
+    return "The host could not be resolved.";
+  }
+  if (message.includes("ETIMEDOUT") || message.includes("AbortError")) {
+    return "The connection timed out.";
+  }
+  return message;
+}
+
+function startupSuggestion(error: unknown): string {
+  const message = errorMessage(error);
+  if (message.includes("ENOENT")) {
+    return "Install the command or add it to PATH, then run doctor-mcp again.";
+  }
+  if (message.includes("ECONNREFUSED") || message.includes("ENOTFOUND") || message.includes("ETIMEDOUT") || message.includes("AbortError")) {
+    return "Check the URL, network connection, and whether the MCP server is running.";
+  }
+  return "Run the configured command manually to inspect its startup error.";
 }
 
 function errorMessage(error: unknown): string {

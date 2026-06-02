@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.1 - 2026-06-02
+
+- Add `doctor-mcp --version`.
+- Add `doctor-mcp --ci` for short warning/error-only logs.
+- Add lightweight HTTP/SSE URL reachability checks.
+- Add project config discovery for Windsurf, Cline, Roo Code, and Continue.
+- Improve startup error messages for missing commands and network failures.
+- Update README with npm badges and release notes.
+
 ## 0.1.0 - 2026-06-02
 
 Initial public release.

@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { extractServers, loadConfigs } from "../src/config.js";
+import { discoverConfigSources, extractServers, loadConfigs } from "../src/config.js";
 import type { ConfigSource } from "../src/types.js";
 
 describe("config loading", () => {
@@ -64,5 +64,15 @@ describe("config loading", () => {
     expect(result.servers).toHaveLength(1);
     expect(result.servers[0]?.client).toBe("VS Code");
     expect(result.servers[0]?.transport).toBe("stdio");
+  });
+
+  it("discovers newer MCP client project configs", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "mcp-doctor-"));
+    const sources = discoverConfigSources(dir);
+
+    expect(sources.some((source) => source.client === "Windsurf" && source.path.includes(".windsurf"))).toBe(true);
+    expect(sources.some((source) => source.client === "Cline" && source.path.includes(".cline"))).toBe(true);
+    expect(sources.some((source) => source.client === "Roo Code" && source.path.includes(".roo"))).toBe(true);
+    expect(sources.some((source) => source.client === "Continue" && source.path.includes(".continue"))).toBe(true);
   });
 });

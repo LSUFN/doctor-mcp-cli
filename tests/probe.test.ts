@@ -1,7 +1,15 @@
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import http from "node:http";
+import { afterEach, describe, expect, it } from "vitest";
 import { probeServer } from "../src/probe.js";
 import type { ServerDefinition } from "../src/types.js";
+
+const servers: http.Server[] = [];
+
+afterEach(async () => {
+  await Promise.all(servers.map((server) => new Promise<void>((resolve) => server.close(() => resolve()))));
+  servers.length = 0;
+});
 
 describe("MCP probing", () => {
   it("lists tools from a fake stdio server", async () => {
@@ -23,6 +31,14 @@ describe("MCP probing", () => {
     expect(checks[0]?.status).toBe("error");
     expect(checks[0]?.message).toBe("Timed out after 100ms");
   });
+
+  it("checks HTTP server reachability", async () => {
+    const url = await startHttpServer();
+    const checks = await probeServer(makeHttpServer(url), 1000);
+
+    expect(checks[0]?.status).toBe("ok");
+    expect(checks[0]?.title).toBe("web: URL reachable");
+  });
 });
 
 function makeServer(dir: string, serverPath: string): ServerDefinition {
@@ -39,4 +55,35 @@ function makeServer(dir: string, serverPath: string): ServerDefinition {
     env: {},
     workspaceRoot: dir
   };
+}
+
+function makeHttpServer(url: string): ServerDefinition {
+  return {
+    id: "source:web",
+    name: "web",
+    sourceId: "source",
+    sourcePath: path.join(process.cwd(), "mcp.json"),
+    client: "Custom",
+    transport: "http",
+    raw: {},
+    args: [],
+    env: {},
+    url,
+    workspaceRoot: process.cwd()
+  };
+}
+
+async function startHttpServer(): Promise<string> {
+  const server = http.createServer((_request, response) => {
+    response.writeHead(200);
+    response.end();
+  });
+  servers.push(server);
+
+  await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", () => resolve()));
+  const address = server.address();
+  if (!address || typeof address === "string") {
+    throw new Error("Expected TCP address");
+  }
+  return `http://127.0.0.1:${address.port}`;
 }

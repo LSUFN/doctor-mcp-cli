@@ -1,6 +1,6 @@
 {
   "name": "doctor-mcp-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Diagnose MCP client configuration and stdio server startup problems.",
   "type": "module",
   "bin": {
@@ -21,6 +21,8 @@
     "claude",
     "cursor",
     "vscode",
+    "windsurf",
+    "cline",
     "cli",
     "diagnostics"
   ],

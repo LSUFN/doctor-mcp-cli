@@ -1,4 +1,4 @@
-# doctor-mcp
+# doctor-mcp-cli
 
 [![CI](https://github.com/LSUFN/doctor-mcp-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/LSUFN/doctor-mcp-cli/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/doctor-mcp-cli.svg)](https://www.npmjs.com/package/doctor-mcp-cli)
@@ -6,6 +6,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Stop guessing why your MCP server is broken.
+
+Run it as `doctor-mcp`.
 
 `doctor-mcp` is a zero-config CLI that scans MCP client config files, checks
 commands, environment variables, and local paths, then starts stdio MCP servers
@@ -42,8 +44,12 @@ a command that is not on `PATH`, or a server that starts but exposes no tools.
 | Claude Code | Project `.mcp.json`, global settings | stdio |
 | Cursor | Project and global `mcp.json` | stdio |
 | VS Code | Workspace `.vscode/mcp.json` | stdio |
+| Windsurf | Project and global `mcp.json` | stdio, HTTP/SSE reachability |
+| Cline | Project `.cline/mcp.json` | stdio, HTTP/SSE reachability |
+| Roo Code | Project `.roo/mcp.json` | stdio, HTTP/SSE reachability |
+| Continue | Project and global config | stdio, HTTP/SSE reachability |
 
-HTTP/SSE servers are recognized in v1, but are not protocol-probed yet.
+HTTP/SSE servers receive a lightweight URL reachability check.
 `doctor-mcp` never edits your config.
 
 ## Install
@@ -67,6 +73,7 @@ doctor-mcp [options]
 Options:
   --config <path>      check one config file instead of auto-discovery
   --json               print a machine-readable JSON report
+  --ci                 print only warnings and errors for CI logs
   --no-start           only run static checks, do not start MCP servers
   --timeout <ms>       stdio server probe timeout in milliseconds (default: 8000)
 ```
@@ -79,6 +86,7 @@ Options:
 - missing environment variables such as `${env:GITHUB_TOKEN}`
 - local path arguments that do not exist
 - stdio MCP startup and `tools/list`
+- HTTP/SSE URL reachability
 - startup timeouts, with cleanup for the spawned process
 
 ## JSON Output

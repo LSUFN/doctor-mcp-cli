@@ -1,4 +1,13 @@
-export type ClientName = "Claude Desktop" | "Claude Code" | "Cursor" | "VS Code" | "Custom";
+export type ClientName =
+  | "Claude Desktop"
+  | "Claude Code"
+  | "Cursor"
+  | "VS Code"
+  | "Windsurf"
+  | "Cline"
+  | "Roo Code"
+  | "Continue"
+  | "Custom";
 
 export type ServerTransport = "stdio" | "http" | "sse" | "unknown";
 
@@ -50,6 +59,7 @@ export interface DoctorOptions {
   cwd: string;
   configPath?: string;
   json: boolean;
+  ci: boolean;
   start: boolean;
   timeoutMs: number;
 }

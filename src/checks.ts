@@ -9,12 +9,12 @@ export function runStaticChecks(server: ServerDefinition): CheckResult[] {
 
   if (server.transport === "http" || server.transport === "sse") {
     checks.push({
-      status: "skip",
+      status: server.url ? "ok" : "warn",
       serverId: server.id,
       sourceId: server.sourceId,
       title: `${server.name}: ${server.transport.toUpperCase()} server`,
-      message: server.url ? `Found URL ${server.url}` : "URL server detected.",
-      suggestion: "v1 only performs full protocol probing for stdio MCP servers."
+      message: server.url ? `Found URL ${server.url}` : "URL server detected without a url field.",
+      suggestion: server.url ? "doctor-mcp will run a lightweight reachability check." : "Add a url field for this server."
     });
     return checks;
   }

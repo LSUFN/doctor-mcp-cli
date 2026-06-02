@@ -55,6 +55,12 @@ export function discoverConfigSources(cwd: string, explicitPath?: string): Confi
   addSource(sources, "Cursor", "Cursor project config", path.join(cwd, ".cursor", "mcp.json"), cwd);
   addSource(sources, "Cursor", "Cursor global config", path.join(home, ".cursor", "mcp.json"));
   addSource(sources, "VS Code", "VS Code workspace config", path.join(cwd, ".vscode", "mcp.json"), cwd);
+  addSource(sources, "Windsurf", "Windsurf project config", path.join(cwd, ".windsurf", "mcp.json"), cwd);
+  addSource(sources, "Windsurf", "Windsurf global config", path.join(home, ".windsurf", "mcp.json"));
+  addSource(sources, "Cline", "Cline project config", path.join(cwd, ".cline", "mcp.json"), cwd);
+  addSource(sources, "Roo Code", "Roo Code project config", path.join(cwd, ".roo", "mcp.json"), cwd);
+  addSource(sources, "Continue", "Continue project config", path.join(cwd, ".continue", "mcp.json"), cwd);
+  addSource(sources, "Continue", "Continue global config", path.join(home, ".continue", "config.json"));
 
   return dedupeSources(sources);
 }
@@ -159,6 +165,14 @@ function findServerRecords(source: ConfigSource, config: unknown): Array<[string
 
   if (isRecord(config.servers)) {
     return Object.entries(config.servers);
+  }
+
+  if (isRecord(config.mcp) && isRecord(config.mcp.servers)) {
+    return Object.entries(config.mcp.servers);
+  }
+
+  if (isRecord(config.mcp) && isRecord(config.mcp.mcpServers)) {
+    return Object.entries(config.mcp.mcpServers);
   }
 
   if (source.client === "Claude Code") {
