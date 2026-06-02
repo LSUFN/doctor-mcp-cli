@@ -4,7 +4,7 @@
   "description": "Diagnose MCP client configuration and stdio server startup problems.",
   "type": "module",
   "bin": {
-    "doctor-mcp": "./dist/cli.js"
+    "doctor-mcp": "dist/cli.js"
   },
   "license": "MIT",
   "repository": {

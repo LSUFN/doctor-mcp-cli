@@ -1,6 +1,8 @@
 # doctor-mcp
 
 [![CI](https://github.com/LSUFN/doctor-mcp-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/LSUFN/doctor-mcp-cli/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/doctor-mcp-cli.svg)](https://www.npmjs.com/package/doctor-mcp-cli)
+[![npm downloads](https://img.shields.io/npm/dw/doctor-mcp-cli.svg)](https://www.npmjs.com/package/doctor-mcp-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Stop guessing why your MCP server is broken.
@@ -14,6 +16,8 @@ to verify that `tools/list` actually works.
 ```bash
 npx doctor-mcp-cli
 ```
+
+npm package: https://www.npmjs.com/package/doctor-mcp-cli
 
 ```text
 OK     Claude Desktop: config found
