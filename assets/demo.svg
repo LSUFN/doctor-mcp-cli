@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="500" viewBox="0 0 960 500" role="img" aria-label="doctor-mcp terminal demo">
+  <rect width="960" height="500" rx="14" fill="#0d1117"/>
+  <rect x="1" y="1" width="958" height="498" rx="14" fill="none" stroke="#30363d"/>
+  <circle cx="34" cy="32" r="7" fill="#ff5f56"/>
+  <circle cx="58" cy="32" r="7" fill="#ffbd2e"/>
+  <circle cx="82" cy="32" r="7" fill="#27c93f"/>
+  <text x="32" y="78" fill="#c9d1d9" font-family="Consolas, Menlo, monospace" font-size="22">$ npx doctor-mcp-cli</text>
+  <text x="32" y="128" fill="#3fb950" font-family="Consolas, Menlo, monospace" font-size="22">OK</text>
+  <text x="126" y="128" fill="#c9d1d9" font-family="Consolas, Menlo, monospace" font-size="22">Claude Desktop: config found</text>
+  <text x="32" y="178" fill="#f85149" font-family="Consolas, Menlo, monospace" font-size="22">ERROR</text>
+  <text x="126" y="178" fill="#c9d1d9" font-family="Consolas, Menlo, monospace" font-size="22">github: missing environment variable GITHUB_TOKEN</text>
+  <text x="126" y="212" fill="#8b949e" font-family="Consolas, Menlo, monospace" font-size="18">Set GITHUB_TOKEN before launching your MCP client.</text>
+  <text x="32" y="264" fill="#f85149" font-family="Consolas, Menlo, monospace" font-size="22">ERROR</text>
+  <text x="126" y="264" fill="#c9d1d9" font-family="Consolas, Menlo, monospace" font-size="22">filesystem: path does not exist</text>
+  <text x="126" y="298" fill="#8b949e" font-family="Consolas, Menlo, monospace" font-size="18">D:\work\missing</text>
+  <text x="32" y="350" fill="#3fb950" font-family="Consolas, Menlo, monospace" font-size="22">OK</text>
+  <text x="126" y="350" fill="#c9d1d9" font-family="Consolas, Menlo, monospace" font-size="22">playwright: tools/list succeeded</text>
+  <text x="126" y="384" fill="#8b949e" font-family="Consolas, Menlo, monospace" font-size="18">12 tools available</text>
+  <text x="32" y="444" fill="#c9d1d9" font-family="Consolas, Menlo, monospace" font-size="22">Summary: 2 OK, 0 WARN, 2 ERROR, 0 SKIP</text>
+</svg>

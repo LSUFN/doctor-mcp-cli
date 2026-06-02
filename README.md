@@ -9,6 +9,8 @@ Stop guessing why your MCP server is broken.
 commands, environment variables, and local paths, then starts stdio MCP servers
 to verify that `tools/list` actually works.
 
+![doctor-mcp terminal demo](assets/demo.svg)
+
 ```bash
 npx doctor-mcp-cli
 ```
